@@ -9,6 +9,7 @@
 #include <vector> 
 #include <iostream>
 #include <thread>
+#include <wx/spinctrl.h>
 
 #include <chrono>
 
@@ -20,6 +21,8 @@ public:
 	void multi(wxPanel* panel, int n, int* max_arrary_ordered);
 	/*void onIdle(wxIdleEvent & evt);*/
 	int render = 0;
+	void GetTestStepValue(wxSpinEvent& event);
+	wxSpinCtrl* Spin;
 
 private:
 	std::vector<customwidgetslider*> sliders;

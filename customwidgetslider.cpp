@@ -62,20 +62,32 @@ int customwidgetslider::GetcustomMainValue()
 
 void customwidgetslider::SetcustomMinValue(int minval)
 {
+	slider->SetMinValue(minval);
 }
 
 int customwidgetslider::GetcustomMinValue()
 {
-	return 0;
+	return slider->GetMinValue();
 }
 
 void customwidgetslider::SetcustomMaxValue(int maxval)
 {
+	slider->SetMaxValue(maxval);
 }
 
 int customwidgetslider::GetcustomMaxValue()
 {
-	return 0;
+	return slider->GetMaxValue();
+}
+
+void customwidgetslider::SetcustomStepValue(int stepval)
+{
+	slider->SetStepVal(stepval);
+}
+
+int customwidgetslider::GetcustomStepValue()
+{
+	return slider->GetStepVal();
 }
 
 int customwidgetslider::GetcustomSliderID()

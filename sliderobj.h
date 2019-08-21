@@ -28,6 +28,9 @@ public:
 	void paintNow();
 	void OnRepaint(wxEraseEvent& event);
 
+	void SetStepVal(int stepvalue);
+	int GetStepVal();
+
 	void OnSize(wxSizeEvent & event);
 	void OnLeftDown(wxMouseEvent & event);
 	void OnMotion(wxMouseEvent & event);
@@ -43,6 +46,7 @@ private:
 	int minValue, maxValue;
 	int selectedslider, prevx, prevy;
 	int ID_new;
+	int step = 100;
 	DECLARE_EVENT_TABLE()
 };
 

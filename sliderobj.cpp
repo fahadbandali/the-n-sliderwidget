@@ -23,6 +23,7 @@ singlesliderobj::singlesliderobj(wxPanel *parent,
 	this->minValue = minValue;
 	this->maxValue = maxValue;
 	this->ID_new = id;
+	m_parent = parent;
 	SetDoubleBuffered(true);
 
 	Bind(wxEVT_LEFT_DOWN, &singlesliderobj::OnLeftDown, this);
@@ -89,6 +90,18 @@ void singlesliderobj::OnRepaint(wxEraseEvent & event)
 	event.Skip();
 }
 
+void singlesliderobj::SetStepVal(int stepvalue) 
+{
+	step = stepvalue;
+	Refresh();
+	Update();
+}
+
+int singlesliderobj::GetStepVal()
+{
+	return step;
+}
+
 void singlesliderobj::DrawThumb(wxDC& dc, wxCoord x, wxCoord y) {
 	
 	dc.SetPen(wxColour("#447aee")); //for right pointer tip
@@ -153,7 +166,7 @@ void singlesliderobj::OnLeftDown(wxMouseEvent& event)
 	pos.x = pos.x;
 	pos.y = h - pos.y;
 	
-	if (abs(mainslidervalue - pos.x) < 25) {
+	if (abs(mainslidervalue - pos.x) < 50) {
 		selectedslider = 1;
 
 	}
@@ -167,7 +180,7 @@ void singlesliderobj::OnLeftDown(wxMouseEvent& event)
 void singlesliderobj::OnMotion(wxMouseEvent& event)
 {
 	int w, h;
-	int m = 100;
+	int m = step;
 	//int m = step;
 	if (selectedslider != 0) {
 		wxClientDC dc(this);

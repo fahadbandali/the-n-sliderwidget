@@ -22,6 +22,8 @@ public:
 	int GetcustomMinValue();
 	void SetcustomMaxValue(int maxval);
 	int GetcustomMaxValue();
+	void SetcustomStepValue(int stepval);
+	int GetcustomStepValue();
 	int GetcustomSliderID();
 
 
