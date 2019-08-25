@@ -1,0 +1,171 @@
+diff --git a/customwidgetslider.cpp b/customwidgetslider.cpp
+index 6a565f9468bc586df3ff7b2cdb668143a704e22f..0fbcef30303dc664bde4a50778d1bbcd26bb11e3 100644
+--- a/customwidgetslider.cpp
++++ b/customwidgetslider.cpp
+@@ -1,19 +1,17 @@
+ #include "customwidgetslider.h"
+ 
+-customwidgetslider::customwidgetslider(wxPanel *parent, int currentvalue, int maxVal)
+-	: wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000,1000))
++customwidgetslider::customwidgetslider(wxPanel *parent, int currentvalue, int maxVal, int absoluteMax)
++	: wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(1000,85))
+ {
+-	Oninit(parent, currentvalue, maxVal);
+-
+-	
++	Oninit(this, currentvalue, maxVal, absoluteMax);
+ }
+ 
+-void customwidgetslider::Oninit(wxPanel* panel, int currentvalue, int maxVal)
++void customwidgetslider::Oninit(wxPanel* panel, int currentvalue, int maxVal, int absoluteMax)
+ {
+ 	id = rand();
+ 	
+ 	playerSizer = new wxBoxSizer(wxHORIZONTAL);
+-	slider = new singlesliderobj(panel, id, currentvalue, 0, maxVal, wxDefaultPosition, wxSize(-1, 85), wxSL_HORIZONTAL | wxSL_SELRANGE);
++	slider = new singlesliderobj(panel, id, currentvalue, 0, maxVal, absoluteMax, wxDefaultPosition, wxSize(-1, 85), wxSL_HORIZONTAL | wxSL_SELRANGE);
+ 	//wxBoxSizer *slidersizer = new wxBoxSizer(wxHORIZONTAL);
+ 	//slidercheck = new wxCheckBox(panel, wxID_ANY, "sync");
+ 	//TimeText = new wxTextCtrl(panel, wxID_ANY, _("Time"));
+@@ -25,15 +23,19 @@ void customwidgetslider::Oninit(wxPanel* panel, int currentvalue, int maxVal)
+ 
+ 	//playerSizer->Add(slidersizer, 0, wxALIGN_CENTER_VERTICAL);
+ 	playerSizer->Add(slider, maxVal, wxEXPAND);
++  playerSizer->AddStretchSpacer( absoluteMax - maxVal );
++  SetSizer(playerSizer);
+ 
+ 	//Bind(wxEVT_CHECKBOX, &customwidgetslider::SetCheck,this);
+ 
+ }
+ 
++/*
+ wxBoxSizer* customwidgetslider::GetPlayerSizer()
+ {
+ 	return playerSizer;
+ }
++*/
+ 
+ void customwidgetslider::SetCheck(wxCommandEvent& event)
+ {
+diff --git a/customwidgetslider.h b/customwidgetslider.h
+index d19cb458d0b66775cfdfe259ec9586ec412485dc..e59bebfa655de61dec9a47ae5fc5d573ebdcac63 100644
+--- a/customwidgetslider.h
++++ b/customwidgetslider.h
+@@ -10,10 +10,10 @@
+ class customwidgetslider : public wxPanel
+ {
+ public:
+-	customwidgetslider(wxPanel* parent, int currentvalue, int maxVal);
++	customwidgetslider(wxPanel* parent, int currentvalue, int maxVal, int absoluteMax);
+ 
+-	void Oninit(wxPanel * panel, int currentvalue, int maxVal);
+-	wxBoxSizer* GetPlayerSizer();
++	void Oninit(wxPanel * panel, int currentvalue, int maxVal, int absoluteMax);
++	// wxBoxSizer* GetPlayerSizer();
+ 	void SetCheck(wxCommandEvent& event);
+ 	bool GetCheck();
+ 	void SetcustomMainValue(int mainval);
+@@ -26,8 +26,6 @@ public:
+ 	int GetcustomStepValue();
+ 	int GetcustomSliderID();
+ 
+-
+-
+ 	singlesliderobj* slider;
+ 	wxCheckBox* slidercheck;
+ 	wxTextCtrl *TimeText;
+diff --git a/sliderobj.cpp b/sliderobj.cpp
+index d6ed8e3775b8c9cb1c77e182817b03ec4bf5a119..39b54b761d981b9a830e59e3360eea4bc29397c0 100644
+--- a/sliderobj.cpp
++++ b/sliderobj.cpp
+@@ -12,7 +12,7 @@ static const wxCoord SLIDER_MARGIN = 1;
+ 
+ singlesliderobj::singlesliderobj(wxPanel *parent,
+ 	int id,
+-	int mainValue, int minValue, int maxValue,
++	int mainValue, int minValue, int maxValue, int absoluteMax,
+ 	const wxPoint& pos,
+ 	const wxSize& size,
+ 	long style)
+@@ -168,13 +168,11 @@ void singlesliderobj::OnLeftDown(wxMouseEvent& event)
+ 	
+ 	if (abs(mainslidervalue - pos.x) < 50) {
+ 		selectedslider = 1;
+-
+ 	}
+ 
+ 	prevx = pos.x;
+ 	prevy = pos.y;
+ 	event.Skip();
+-
+ }
+ 
+ void singlesliderobj::OnMotion(wxMouseEvent& event)
+diff --git a/sliderobj.h b/sliderobj.h
+index 7fa2eb6dc0ca74287b3efea487782288b2d82153..95b84a974f05df4d31036448da0b538eb2fae277 100644
+--- a/sliderobj.h
++++ b/sliderobj.h
+@@ -10,7 +10,7 @@ class singlesliderobj : public wxPanel
+ public:
+ 	singlesliderobj(wxPanel* parent, 
+ 		int id,
+-		int mainValue, int minValue, int maxValue,
++		int mainValue, int minValue, int maxValue, int absoluteMax,
+ 		const wxPoint&pos = wxDefaultPosition,
+ 		const wxSize& size = wxSize(-1,85),
+ 		long style = wxSL_HORIZONTAL | wxSL_SELRANGE);
+diff --git a/test.cpp b/test.cpp
+index 3b10d3ee9f3eb2ff984abe1cfc543dc8fa071147..a9d737bc46e6b2deaa921044eac0e149a64ea2fd 100644
+--- a/test.cpp
++++ b/test.cpp
+@@ -7,14 +7,14 @@ test::test(const wxString& title)
+ 	wxPanel* panel = new wxPanel(this);
+ 
+ 	int practice[8] = { 500,1000,1500,2000,2049,2949,1003,3506};
+-	multi(panel, 3,practice);
++	multi(panel, 3, practice, 1500);
+ 	//wxCheckBox* testingcheck = new wxCheckBox(panel, wxID_ANY, "testingcheck");
+ 
+ 
+ 
+ }
+ 
+-void test::multi(wxPanel* panel ,int n, int* max_array_ordered) {
++void test::multi(wxPanel* panel ,int n, int* max_array_ordered, int absolute_max) {
+ 
+ 	wxImage::AddHandler(new wxPNGHandler);
+ 	wxBitmapButton *playbutton = new wxBitmapButton(panel, wxID_ANY, wxBitmap(wxT("newplay.png"),
+@@ -30,8 +30,8 @@ void test::multi(wxPanel* panel ,int n, int* max_array_ordered) {
+ 	wxBoxSizer *mediaSizer = new wxBoxSizer(wxVERTICAL);
+ 
+ 	for (int i = 0; i < n; i++) {
+-		
+-		sliders.push_back(new customwidgetslider(panel, max_array_ordered[i], max_array_ordered[i]));
++		customwidgetslider *slider = new customwidgetslider(panel, max_array_ordered[i], max_array_ordered[i], absolute_max);
++		sliders.push_back(slider);
+ 		//wxCheckBox* testingcheck = new wxCheckBox(mainpanel, wxID_ANY, "testingcheck");
+ 		//mediaSizer->Add(testingcheck, 1, wxLEFT);
+ 		//wxBoxSizer *slidersizer = new wxBoxSizer(wxHORIZONTAL);
+@@ -57,7 +57,8 @@ void test::multi(wxPanel* panel ,int n, int* max_array_ordered) {
+ 		slidersizer->Add(FrameText, 1, wxRIGHT);
+ 
+ 		fullsizer->Add(slidersizer, 0, wxALIGN_CENTER_VERTICAL);
+-		fullsizer->Add(sliders.at(i)->GetPlayerSizer(), 1, wxEXPAND);
++		// fullsizer->Add(slider->GetPlayerSizer(), 1, wxEXPAND);
++		fullsizer->Add(slider, 1, wxEXPAND|wxALL, 8);
+ 
+ 		mediaSizer->Add(fullsizer, 1, wxEXPAND);
+ 	}
+diff --git a/test.h b/test.h
+index d5c815950825b66591e628c77a266c93d953df66..2f4cd6983d4bdcc3c3badcfcb96de9bf13690940 100644
+--- a/test.h
++++ b/test.h
+@@ -18,7 +18,7 @@ class test : public wxFrame
+ public:
+ 	test(const wxString& title);
+ 
+-	void multi(wxPanel* panel, int n, int* max_arrary_ordered);
++	void multi(wxPanel* panel, int n, int* max_arrary_ordered, int absoluteMax);
+ 	/*void onIdle(wxIdleEvent & evt);*/
+ 	int render = 0;
+ 	void GetTestStepValue(wxSpinEvent& event);
