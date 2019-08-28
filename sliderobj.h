@@ -8,11 +8,11 @@
 class singlesliderobj : public wxPanel
 {
 public:
-	singlesliderobj(wxPanel* parent, 
+	singlesliderobj(wxPanel* parent,
 		int id,
-		int mainValue, int minValue, int maxValue,
+		int mainValue, int minValue, int maxValue, int absoluteMax,
 		const wxPoint&pos = wxDefaultPosition,
-		const wxSize& size = wxSize(-1,85),
+		const wxSize& size = wxSize(-1, 85),
 		long style = wxSL_HORIZONTAL | wxSL_SELRANGE);
 
 	void SetMainValue(int mainval);
@@ -40,7 +40,7 @@ public:
 protected:
 	void DrawThumb(wxDC& dc, wxCoord x, wxCoord y);
 	void render(wxDC & dc);
-	
+
 
 private:
 	int minValue, maxValue;

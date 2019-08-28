@@ -10,10 +10,10 @@
 class customwidgetslider : public wxPanel
 {
 public:
-	customwidgetslider(wxPanel* parent, int currentvalue, int maxVal);
+	customwidgetslider(wxPanel* parent, int currentvalue, int maxVal, int absoluteMax);
 
-	void Oninit(wxPanel * panel, int currentvalue, int maxVal);
-	wxBoxSizer* GetPlayerSizer();
+	void Oninit(wxPanel * panel, int currentvalue, int maxVal, int absoluteMax);
+	// wxBoxSizer* GetPlayerSizer();
 	void SetCheck(wxCommandEvent& event);
 	bool GetCheck();
 	void SetcustomMainValue(int mainval);
@@ -25,8 +25,6 @@ public:
 	void SetcustomStepValue(int stepval);
 	int GetcustomStepValue();
 	int GetcustomSliderID();
-
-
 
 	singlesliderobj* slider;
 	wxCheckBox* slidercheck;

@@ -5,18 +5,18 @@
 #include "sliderobj.h"
 
 BEGIN_EVENT_TABLE(singlesliderobj, wxPanel)
-	EVT_ERASE_BACKGROUND(singlesliderobj::OnRepaint)
+EVT_ERASE_BACKGROUND(singlesliderobj::OnRepaint)
 END_EVENT_TABLE()
 
 static const wxCoord SLIDER_MARGIN = 1;
 
 singlesliderobj::singlesliderobj(wxPanel *parent,
 	int id,
-	int mainValue, int minValue, int maxValue,
+	int mainValue, int minValue, int maxValue, int absoluteMax,
 	const wxPoint& pos,
 	const wxSize& size,
 	long style)
-	: wxPanel(parent,id, pos,size, wxBORDER_NONE)
+	: wxPanel(parent, id, pos, size, wxBORDER_NONE)
 
 {
 	this->mainValue = mainValue;
@@ -67,14 +67,14 @@ int singlesliderobj::GetMaxValue() {
 }
 
 int singlesliderobj::GetSliderID() {
-	
+
 	return ID_new;
 
 }
 
 
 void singlesliderobj::OnPaint(wxPaintEvent&) {
-	
+
 	wxPaintDC dc(this);
 	render(dc);
 }
@@ -90,7 +90,7 @@ void singlesliderobj::OnRepaint(wxEraseEvent & event)
 	event.Skip();
 }
 
-void singlesliderobj::SetStepVal(int stepvalue) 
+void singlesliderobj::SetStepVal(int stepvalue)
 {
 	step = stepvalue;
 	Refresh();
@@ -103,7 +103,7 @@ int singlesliderobj::GetStepVal()
 }
 
 void singlesliderobj::DrawThumb(wxDC& dc, wxCoord x, wxCoord y) {
-	
+
 	dc.SetPen(wxColour("#447aee")); //for right pointer tip
 	dc.DrawLine(x + 10, y + 16, x + 4, y + 22);
 	dc.DrawLine(x + 10, y + 0, x + 10, y + 17);
@@ -124,7 +124,7 @@ void singlesliderobj::DrawThumb(wxDC& dc, wxCoord x, wxCoord y) {
 }
 
 void singlesliderobj::render(wxDC& dc) {
-	
+
 	int w, h;
 	GetSize(&w, &h);
 	wxCoord tw, th;
@@ -165,16 +165,14 @@ void singlesliderobj::OnLeftDown(wxMouseEvent& event)
 	wxPoint pos = event.GetLogicalPosition(dc);
 	pos.x = pos.x;
 	pos.y = h - pos.y;
-	
+
 	if (abs(mainslidervalue - pos.x) < 50) {
 		selectedslider = 1;
-
 	}
 
 	prevx = pos.x;
 	prevy = pos.y;
 	event.Skip();
-
 }
 
 void singlesliderobj::OnMotion(wxMouseEvent& event)

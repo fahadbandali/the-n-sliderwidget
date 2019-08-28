@@ -18,8 +18,8 @@ class test : public wxFrame
 public:
 	test(const wxString& title);
 
-	void multi(wxPanel* panel, int n, int* max_arrary_ordered);
-	/*void onIdle(wxIdleEvent & evt);*/
+	void multi(wxPanel* panel, int n, int* max_arrary_ordered, int absolute_max);
+	void onIdle(wxIdleEvent & evt);
 	int render = 0;
 	void GetTestStepValue(wxSpinEvent& event);
 	wxSpinCtrl* Spin;
