@@ -179,7 +179,6 @@ void singlesliderobj::OnMotion(wxMouseEvent& event)
 {
 	int w, h;
 	int m = step;
-	//int m = step;
 	if (selectedslider != 0) {
 		wxClientDC dc(this);
 		dc.GetSize(&w, &h);

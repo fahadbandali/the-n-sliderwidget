@@ -28,5 +28,4 @@ private:
 	std::vector<customwidgetslider*> sliders;
 	std::vector<customwidgetslider*> checked_sliders;
 };
-
 #endif

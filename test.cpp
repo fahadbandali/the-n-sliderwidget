@@ -95,8 +95,6 @@ void test::onIdle(wxIdleEvent& evt)
 		//}
 
 		//for the case that it as been clicked but now there are none
-		Refresh();
-		Update();
 		
 	
 	}

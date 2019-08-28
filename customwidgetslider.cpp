@@ -117,4 +117,3 @@ int customwidgetslider::GetcustomSliderID()
 //	event.Skip();
 //
 //}
-
