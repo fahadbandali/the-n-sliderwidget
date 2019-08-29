@@ -5,11 +5,10 @@ test::test(const wxString& title)
 	: wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1500, 700))
 {
 	wxPanel* panel = new wxPanel(this);
-
 	int practice[8] = { 500,1000,1500,2000,2049,2949,1003,3506 };
-	multi(panel, 8, practice, 3600);
-
-
+	multi(panel, 3, practice, 1500);
+	Bind(wxEVT_IDLE, &test::onIdle, this);
+	Bind(wxEVT_COMMAND_SPINCTRL_UPDATED, &test::GetTestStepValue, this);
 
 }
 
@@ -54,8 +53,7 @@ void test::multi(wxPanel* panel, int n, int* max_array_ordered, int absolute_max
 
 	panel->SetSizer(mainSizer);
 
-	Bind(wxEVT_COMMAND_SPINCTRL_UPDATED, &test::GetTestStepValue, this);
-	Bind(wxEVT_IDLE, &test::onIdle, this);
+	
 
 }
 
@@ -73,33 +71,27 @@ void test::onIdle(wxIdleEvent& evt)
 {
 	if (render) {
 		int our_value;
-		//int our_value = sliders[0]->GetcustomMainValue();
+		int previousmax;
 		for (int p = 0; p < sliders.size(); p++) {
 			if (sliders[p]->GetCheck()) {
 				checked_sliders.push_back(sliders.at(p));
-				our_value = checked_sliders[0]->GetcustomMainValue();
+				
 			}
 		}
 
 		//match
 		if (checked_sliders.size() > 1) {
 			for (int c = 0; c < checked_sliders.size(); c++) {
+				our_value = checked_sliders[0]->GetcustomMainValue();
 				checked_sliders.at(c)->SetcustomMainValue(our_value);
 			}
 		}
 
-		//if (our_value > 0) {
-		//	for (int r = 0; r < sliders.size(); r++) {
-		//		sliders.at(r)->SetcustomMainValue(our_value);
-		//	}
-		//}
-
 		//for the case that it as been clicked but now there are none
-		
-	
+		for (int j = 0; j < checked_sliders.size(); j++) {
+			if (checked_sliders[j]->GetCheck() == false) {
+				checked_sliders.erase(checked_sliders.begin());
+			}
+		}
 	}
 }
-
-
-
-//then add sync, adding the grey scale thing

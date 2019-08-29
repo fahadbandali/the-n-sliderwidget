@@ -35,6 +35,7 @@ public:
 	void OnLeftDown(wxMouseEvent & event);
 	void OnMotion(wxMouseEvent & event);
 	void OnLeftUp(wxMouseEvent & event);
+	void OnWheel(wxMouseEvent & event);
 	int mainValue;
 
 protected:

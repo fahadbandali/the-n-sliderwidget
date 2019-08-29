@@ -29,6 +29,7 @@ singlesliderobj::singlesliderobj(wxPanel *parent,
 	Bind(wxEVT_LEFT_DOWN, &singlesliderobj::OnLeftDown, this);
 	Bind(wxEVT_MOTION, &singlesliderobj::OnMotion, this);
 	Bind(wxEVT_LEFT_UP, &singlesliderobj::OnLeftUp, this);
+	Bind(wxEVT_MOUSEWHEEL, &singlesliderobj::OnWheel, this);
 
 	Connect(wxEVT_PAINT, wxPaintEventHandler(singlesliderobj::OnPaint));
 	Connect(wxEVT_SIZE, wxSizeEventHandler(singlesliderobj::OnSize));
@@ -36,7 +37,13 @@ singlesliderobj::singlesliderobj(wxPanel *parent,
 
 void singlesliderobj::SetMainValue(int mval) {
 
-	mainValue = mval;
+	if (mval > maxValue) {
+		mainValue = maxValue;
+	}
+	else {
+		mainValue = mval;
+	}
+	
 	Refresh();
 	Update();
 }
@@ -213,4 +220,29 @@ void singlesliderobj::OnLeftUp(wxMouseEvent& event)
 		e.SetString("update");
 		ProcessWindowEvent(e);
 	}
+}
+
+void singlesliderobj::OnWheel(wxMouseEvent& event)
+{
+	int w, h;
+	int m = step;
+	wxClientDC dc(this);
+	dc.GetSize(&w, &h);
+	wxPoint pos = event.GetLogicalPosition(dc);
+	pos.x = pos.x - SLIDER_MARGIN;
+	pos.y = h - SLIDER_MARGIN - pos.y;
+	if (event.GetWheelRotation() < 0)
+		m = -m;
+	if (pos.y < h / 2) {
+		mainValue -= m;
+		if (mainValue < minValue)  mainValue = minValue;
+		if (mainValue >= maxValue) mainValue = maxValue;
+	}
+	Refresh();
+	Update();
+	wxCommandEvent e(wxEVT_SCROLL_CHANGED);
+	e.SetEventObject(this);
+	e.SetString("update");
+	ProcessWindowEvent(e);
+	event.Skip();
 }

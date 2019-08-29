@@ -27,15 +27,7 @@ void customwidgetslider::Oninit(wxPanel* panel, int currentvalue, int maxVal, in
 	SetSizer(playerSizer);
 
 	Bind(wxEVT_CHECKBOX, &customwidgetslider::SetCheck,this);
-
 }
-
-/*
-wxBoxSizer* customwidgetslider::GetPlayerSizer()
-{
-	return playerSizer;
-}
-*/
 
 void customwidgetslider::SetCheck(wxCommandEvent& event)
 {
@@ -94,26 +86,6 @@ int customwidgetslider::GetcustomStepValue()
 
 int customwidgetslider::GetcustomSliderID()
 {
-	return 0;
+	return id;
 }
 
-//void customwidgetslider::OnLeftDown(wxMouseEvent& event)
-//{
-//	int w, h;
-//	wxClientDC dc(this);
-//	dc.GetSize(&w, &h);
-//	double mainslidervalue = ((double)slider->GetMainValue() / (double)slider->GetMaxValue()) * (double)w / 1.3;
-//	wxPoint pos = event.GetLogicalPosition(dc);
-//	pos.x = pos.x;
-//	pos.y = h - pos.y;
-//	
-//	if (abs(mainslidervalue - pos.x) < 25) {
-//		selectedslider = 1;
-//
-//	}
-//
-//	prevx = pos.x;
-//	prevy = pos.y;
-//	event.Skip();
-//
-//}
